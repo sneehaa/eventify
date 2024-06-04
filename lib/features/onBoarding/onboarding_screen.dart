@@ -1,3 +1,4 @@
+import 'package:eventify/config/router/app_router.dart';
 import 'package:flutter/material.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -41,7 +42,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const SizedBox(width: 20), // Add some padding from the left edge
+                  const SizedBox(width: 20),
                   Container(
                     width: 14,
                     height: 14,
@@ -50,7 +51,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       shape: BoxShape.circle,
                     ),
                   ),
-                  const SizedBox(width: 8), // Space between dots
+                  const SizedBox(width: 8),
                   Container(
                     width: 10,
                     height: 10,
@@ -59,7 +60,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       shape: BoxShape.circle,
                     ),
                   ),
-                  const SizedBox(width: 8), // Space between dots
+                  const SizedBox(width: 8),
                   Container(
                     width: 8,
                     height: 8,
@@ -68,7 +69,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       shape: BoxShape.circle,
                     ),
                   ),
-                  const SizedBox(width: 8), // Space between dots
+                  const SizedBox(width: 8), 
                   Container(
                     width: 6,
                     height: 6,
@@ -88,6 +89,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             height: 42,
             child: ElevatedButton(
               onPressed: () {
+                Navigator.pushNamed(context, AppRoute.homeRoute);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFFFC700),
