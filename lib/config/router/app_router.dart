@@ -1,3 +1,6 @@
+import 'package:eventify/features/onBoarding/onboarding_screen.dart';
+import 'package:eventify/features/splash/splash_screen.dart';
+
 class AppRoute {
   AppRoute._();
 
@@ -8,9 +11,9 @@ class AppRoute {
 
   static getApplicationRoute() {
     return {
-      // splashRoute: (context) => const SplashView(),
+      splashRoute: (context) => const SplashScreen(),
       // locationRoute: (context) => const LocationPermissionView(),
-      // onboardingRoute: (context) => const OnboardingView(),
+      onboardingRoute: (context) => const OnboardingScreen(),
       // loginRoute: (context) => const LoginView(),
     };
   }

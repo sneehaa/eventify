@@ -6,14 +6,17 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'MealMap',
-      theme: ThemeData(
-        fontFamily: 'LibreBaskerville',
+    return PopScope(
+      canPop: false,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Eventify',
+        theme: ThemeData(
+          fontFamily: 'LibreBaskerville',
+        ),
+        initialRoute: AppRoute.splashRoute,
+        routes: AppRoute.getApplicationRoute(),
       ),
-      initialRoute: AppRoute.splashRoute,
-      routes: AppRoute.getApplicationRoute(),
     );
   }
 }
