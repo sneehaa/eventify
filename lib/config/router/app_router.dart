@@ -1,3 +1,4 @@
+import 'package:eventify/features/details/details_screen.dart';
 import 'package:eventify/features/home/home_screen.dart';
 import 'package:eventify/features/login/login.dart';
 import 'package:eventify/features/onBoarding/onboarding_screen.dart';
@@ -13,6 +14,7 @@ class AppRoute {
   static const String loginRoute = '/login';
   static const String signupRoute = '/signup';
   static const String homeRoute = '/home';
+  static const String detailsRoute = '/details';
 
   static getApplicationRoute() {
     return {
@@ -21,6 +23,8 @@ class AppRoute {
       loginRoute: (context) => const LoginView(),
       homeRoute: (context) =>  const HomeScreen(),
       signupRoute: (context) => const SignupPage(),
+      detailsRoute: (context) => const DetailsPage(),
     };
+
   }
 }
