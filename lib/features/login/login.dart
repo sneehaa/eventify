@@ -106,7 +106,7 @@ class _LoginViewState extends State<LoginView> {
                       style: GoogleFonts.libreBaskerville(
                         color: const Color(0xFFF56B62),
                         fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                       
                       ),
                     ),
                   ),
