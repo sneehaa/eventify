@@ -89,7 +89,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             height: 42,
             child: ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, AppRoute.homeRoute);
+                Navigator.pushNamed(context, AppRoute.loginRoute);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFFFC700),
