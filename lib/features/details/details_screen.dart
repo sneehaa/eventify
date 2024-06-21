@@ -244,37 +244,37 @@ class _DetailsPageState extends State<DetailsPage> {
   Widget _buildTicketOption(String title, String price, int ticketCount, ValueChanged<int> onChanged) {
     return Row(
       children: [
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            margin: const EdgeInsets.only(bottom: 10),
-            decoration: BoxDecoration(
-              color: const Color(0xFFFAFAFF),
-              borderRadius: BorderRadius.circular(13),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: GoogleFonts.libreBaskerville(
-                    fontSize: 14,
-                    color: const Color(0xFF0C5387),
-                    fontWeight: FontWeight.bold,
-                  ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+          margin: const EdgeInsets.only(bottom: 10),
+          decoration: BoxDecoration(
+            color: const Color(0xFFFAFAFF),
+            borderRadius: BorderRadius.circular(13),
+          ),
+          width: 165,
+          height: 60,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: GoogleFonts.libreBaskerville(
+                  fontSize: 14,
+                 color: const Color(0xFF172B4D),
+                  fontWeight: FontWeight.bold,
                 ),
-                Text(
-                  price,
-                  style: GoogleFonts.libreBaskerville(
-                    fontSize: 14,
-                    color: const Color(0xFF0C5387),
-                  ),
+              ),
+              Text(
+                price,
+                style: GoogleFonts.libreBaskerville(
+                  fontSize: 12,
+                  color: const Color(0xFF585858),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
-        const SizedBox(width: 10),
+        const SizedBox(width: 90),
         Row(
           children: [
             _buildIconButton(Icons.remove, () {
@@ -288,7 +288,7 @@ class _DetailsPageState extends State<DetailsPage> {
                 '$ticketCount',
                 style: GoogleFonts.libreBaskerville(
                   fontSize: 14,
-                  color: const Color(0xFF0C5387),
+                  color: const Color(0xFF172B4D),
                 ),
               ),
             ),
@@ -303,14 +303,14 @@ class _DetailsPageState extends State<DetailsPage> {
 
   Widget _buildIconButton(IconData icon, VoidCallback onPressed) {
     return Container(
-      height: 49,
       width: 44,
+      height: 49,
       decoration: BoxDecoration(
         border: Border.all(color: const Color(0xFFD1D1D1)),
         borderRadius: BorderRadius.circular(13),
       ),
       child: IconButton(
-        icon: Icon(icon, size: 18, color: const Color(0xFF8CC8B0)),
+        icon: Icon(icon, size: 16, color: const Color(0xFF8CC8B0)),
         onPressed: onPressed,
       ),
     );
