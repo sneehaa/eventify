@@ -2,299 +2,316 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DetailsPage extends StatefulWidget {
-  const DetailsPage({Key? key}) : super(key: key);
+  const DetailsPage({super.key});
 
   @override
   State<DetailsPage> createState() => _DetailsPageState();
 }
 
 class _DetailsPageState extends State<DetailsPage> {
+  int _generalTicketCount = 1;
+  int _fanpitTicketCount = 1;
+  int _vipTicketCount = 1;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            // Background Image
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: Image.asset(
-                'assets/images/Atif Aslam.jpg',
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.7,
-              ),
+      body: Stack(
+        children: [
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Image.asset(
+              'assets/images/Atif Aslam.jpg',
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: 500,
             ),
-            // Container with concert details
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: Container(
-                padding: const EdgeInsets.all(24.0),
-                height: MediaQuery.of(context).size.height * 0.5,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(50),
-                    topRight: Radius.circular(50),
-                  ),
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: Container(
+              padding: const EdgeInsets.all(24.0),
+              height: 600,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(50),
+                  topRight: Radius.circular(50),
                 ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Atif Aslam Concert',
-                        style: GoogleFonts.libreBaskerville(
-                          fontSize: 24,
-                          color: const Color(0xFF0C5387),
-                          fontWeight: FontWeight.bold,
-                        ),
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Atif Aslam Concert',
+                      style: GoogleFonts.libreBaskerville(
+                        fontSize: 18,
+                        color: const Color(0xFF0C5387),
+                        fontWeight: FontWeight.bold,
                       ),
-                      const SizedBox(height: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.date_range, color: Colors.black),
-                              const SizedBox(width: 4),
-                              Text(
-                                '1st May, 2025',
-                                style: GoogleFonts.libreBaskerville(
-                                  fontSize: 12,
-                                  color: Colors.black,
-                                  fontStyle: FontStyle.italic,
-                                ),
+                    ),
+                    const SizedBox(height: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(Icons.date_range, color: Colors.black, size: 15,),
+                            const SizedBox(width: 4),
+                            Text(
+                              '1st May, 2025',
+                              style: GoogleFonts.libreBaskerville(
+                                fontSize: 12,
+                                color: Colors.black,
+                                fontStyle: FontStyle.italic,
                               ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Icon(Icons.access_time, color: Colors.black),
-                              const SizedBox(width: 4),
-                              Text(
-                                '4 PM Onwards',
-                                style: GoogleFonts.libreBaskerville(
-                                  fontSize: 12,
-                                  color: Colors.black,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          Image.asset(
-                            'assets/icons/location.png',
-                            width: 20,
-                            height: 20,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            'Hyatt Ground, Kathmandu',
-                            style: GoogleFonts.libreBaskerville(
-                              fontSize: 12,
-                              color: const Color(0xFFFA0F00),
-                              fontStyle: FontStyle.italic,
                             ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            const Icon(Icons.access_time, color: Colors.black, size: 15,),
+                            const SizedBox(width: 4),
+                            Text(
+                              '4 PM Onwards',
+                              style: GoogleFonts.libreBaskerville(
+                                fontSize: 12,
+                                color: Colors.black,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Image.asset(
+                          'assets/icons/location.png',
+                          width: 15,
+                          height: 15,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          'Hyatt Ground, Kathmandu',
+                          style: GoogleFonts.libreBaskerville(
+                            fontSize: 12,
+                            color: const Color(0xFFFA0F00),
+                            fontStyle: FontStyle.italic,
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      Container(
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Container(
+                      height: 1,
+                      width: 380,
+                      color: const Color(0xFF7A869A),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        Text(
+                          'Ticket Prices',
+                          style: GoogleFonts.libreBaskerville(
+                            fontSize: 12,
+                            color: const Color.fromARGB(255, 22, 22, 22),
+                          ),
+                        ),
+                        const SizedBox(width: 40),
+                        Text(
+                          'Descriptions',
+                          style: GoogleFonts.libreBaskerville(
+                            fontSize: 12,
+                            color: const Color.fromARGB(255, 22, 22, 22),
+                          ),
+                        ),
+                        const SizedBox(width: 40),
+                        Text(
+                          'Terms & Conditions',
+                          style: GoogleFonts.libreBaskerville(
+                            fontSize: 12,
+                            color: const Color.fromARGB(255, 22, 22, 22),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Container(
                         height: 1,
-                        width: 352,
+                        width: 380,
                         color: const Color(0xFF7A869A),
                       ),
-                      const SizedBox(height: 20),
-                      Row(
-                        children: [
-                          Text(
-                            'Ticket Prices',
-                            style: GoogleFonts.libreBaskerville(
-                              fontSize: 11,
-                              color: const Color(0xFF4C4D4E),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Text(
-                            'Descriptions',
-                            style: GoogleFonts.libreBaskerville(
-                              fontSize: 11,
-                              color: const Color(0xFF4C4D4E),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Text(
-                            'Terms & Conditions',
-                            style: GoogleFonts.libreBaskerville(
-                              fontSize: 11,
-                              color: const Color(0xFF4C4D4E),
-                            ),
-                          ),
-                        ],
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      'Select Ticket:',
+                      style: GoogleFonts.libreBaskerville(
+                        fontSize: 14,
+                        color: Colors.black,
                       ),
-                      const SizedBox(height: 20),
-                      Text(
-                        'Select Ticket:',
-                        style: GoogleFonts.libreBaskerville(
-                          fontSize: 16,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Text(
+                          'Phase I',
+                          style: GoogleFonts.libreBaskerville(
+                            fontSize: 14,
+                            color: const Color.fromARGB(255, 36, 36, 36),
+                            fontWeight: FontWeight.bold
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      // Ticket options
-                      Column(
-                        children: [
-                          // General Ticket
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 15,
-                            ),
-                            margin: const EdgeInsets.only(bottom: 10),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: const Color(0xFF7A869A),
-),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'General',
-                                  style: GoogleFonts.libreBaskerville(
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                Text(
-                                  'Rs. 50,000',
-                                  style: GoogleFonts.libreBaskerville(
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ],
-                            ),
+                        const SizedBox(width: 200),
+                        Text(
+                          'No.of Tickets',
+                          style: GoogleFonts.libreBaskerville(
+                            fontSize: 14,
+                            color: const Color.fromARGB(255, 36, 36, 36),
+                            fontWeight: FontWeight.bold
                           ),
-                          // Fanpit Ticket
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 15,
-                            ),
-                            margin: const EdgeInsets.only(bottom: 10),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: const Color(0xFF7A869A),
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Fanpit',
-                                  style: GoogleFonts.libreBaskerville(
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                Text(
-                                  'Rs. 10,000',
-                                  style: GoogleFonts.libreBaskerville(
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          // VIP Ticket
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 15,
-                            ),
-                            margin: const EdgeInsets.only(bottom: 10),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: const Color(0xFF7A869A),
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'VIP',
-                                  style: GoogleFonts.libreBaskerville(
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                Text(
-                                  'Rs. 20,000',
-                                  style: GoogleFonts.libreBaskerville(
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Proceed',
-                          style: GoogleFonts.libreBaskerville(),
                         ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Column(
+                      children: [
+                        _buildTicketOption('General', 'Rs. 5,000', _generalTicketCount, (newCount) {
+                          setState(() {
+                            _generalTicketCount = newCount;
+                          });
+                        }),
+                        _buildTicketOption('Fanpit', 'Rs. 10,000', _fanpitTicketCount, (newCount) {
+                          setState(() {
+                            _fanpitTicketCount = newCount;
+                          });
+                        }),
+                        _buildTicketOption('VIP', 'Rs. 20,000', _vipTicketCount, (newCount) {
+                          setState(() {
+                            _vipTicketCount = newCount;
+                          });
+                        }),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text(
+                        'Proceed',
+                        style: GoogleFonts.libreBaskerville(),
                       ),
-                    ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 45,
+            left: 24,
+            child: IconButton(
+              icon: const Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+                size: 30,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ),
+          Positioned(
+            top: 20,
+            right: -20,
+            child: Image.asset(
+              'assets/icons/fav.png',
+              width: 100,
+              height: 100,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTicketOption(String title, String price, int ticketCount, ValueChanged<int> onChanged) {
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            margin: const EdgeInsets.only(bottom: 10),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFAFAFF),
+              borderRadius: BorderRadius.circular(13),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: GoogleFonts.libreBaskerville(
+                    fontSize: 14,
+                    color: const Color(0xFF0C5387),
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-            ),
-            // Back Button
-            Positioned(
-              top: 24,
-              left: 24,
-              child: IconButton(
-                icon: const Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
-                  size: 30,
+                Text(
+                  price,
+                  style: GoogleFonts.libreBaskerville(
+                    fontSize: 14,
+                    color: const Color(0xFF0C5387),
+                  ),
                 ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Row(
+          children: [
+            _buildIconButton(Icons.remove, () {
+              if (ticketCount > 0) {
+                onChanged(ticketCount - 1);
+              }
+            }),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                '$ticketCount',
+                style: GoogleFonts.libreBaskerville(
+                  fontSize: 14,
+                  color: const Color(0xFF0C5387),
+                ),
               ),
             ),
-            // Favorite Icon
-            Positioned(
-              top: -5,
-              right: -20,
-              child: Image.asset(
-                'assets/icons/fav.png',
-                width: 100,
-                height: 100,
-              ),
-            ),
+            _buildIconButton(Icons.add, () {
+              onChanged(ticketCount + 1);
+            }),
           ],
         ),
+      ],
+    );
+  }
+
+  Widget _buildIconButton(IconData icon, VoidCallback onPressed) {
+    return Container(
+      height: 49,
+      width: 44,
+      decoration: BoxDecoration(
+        border: Border.all(color: const Color(0xFFD1D1D1)),
+        borderRadius: BorderRadius.circular(13),
+      ),
+      child: IconButton(
+        icon: Icon(icon, size: 18, color: const Color(0xFF8CC8B0)),
+        onPressed: onPressed,
       ),
     );
   }

@@ -23,8 +23,9 @@ class AppRoute {
       loginRoute: (context) => const LoginView(),
       homeRoute: (context) =>  const HomeScreen(),
       signupRoute: (context) => const SignupPage(),
-      detailsRoute: (context) => const DetailsPage(),
+      detailsRoute: (context) =>  const DetailsPage(),
     };
 
   }
 }
+
