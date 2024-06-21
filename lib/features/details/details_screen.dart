@@ -35,7 +35,7 @@ class _DetailsPageState extends State<DetailsPage> {
             bottom: 0,
             child: Container(
               padding: const EdgeInsets.all(24.0),
-              height: 600,
+              height: 550,
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -200,12 +200,24 @@ class _DetailsPageState extends State<DetailsPage> {
                         }),
                       ],
                     ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {},
-                      child: Text(
-                        'Proceed',
-                        style: GoogleFonts.libreBaskerville(),
+                    const SizedBox(height: 10),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFFFC700),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          )
+                        ),
+                        child: Text(
+                          'Proceed',
+                          style: GoogleFonts.libreBaskerville(
+                            fontSize: 18,
+                            color: const Color(0xFF1C1B19)
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -249,10 +261,10 @@ class _DetailsPageState extends State<DetailsPage> {
           margin: const EdgeInsets.only(bottom: 10),
           decoration: BoxDecoration(
             color: const Color(0xFFFAFAFF),
-            borderRadius: BorderRadius.circular(13),
+            borderRadius: BorderRadius.circular(15),
           ),
-          width: 165,
-          height: 60,
+          width: 170,
+          height: 66,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -264,6 +276,7 @@ class _DetailsPageState extends State<DetailsPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              const SizedBox(height: 8,),
               Text(
                 price,
                 style: GoogleFonts.libreBaskerville(
@@ -274,7 +287,7 @@ class _DetailsPageState extends State<DetailsPage> {
             ],
           ),
         ),
-        const SizedBox(width: 90),
+        const SizedBox(width: 70),
         Row(
           children: [
             _buildIconButton(Icons.remove, () {
@@ -282,6 +295,7 @@ class _DetailsPageState extends State<DetailsPage> {
                 onChanged(ticketCount - 1);
               }
             }),
+            const SizedBox(width: 15),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(
@@ -292,6 +306,7 @@ class _DetailsPageState extends State<DetailsPage> {
                 ),
               ),
             ),
+            const SizedBox(width: 15),
             _buildIconButton(Icons.add, () {
               onChanged(ticketCount + 1);
             }),
