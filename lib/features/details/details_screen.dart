@@ -35,7 +35,7 @@ class _DetailsPageState extends State<DetailsPage> {
             bottom: 0,
             child: Container(
               padding: const EdgeInsets.all(24.0),
-              height: 550,
+              height: 570,
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -154,8 +154,8 @@ class _DetailsPageState extends State<DetailsPage> {
                     Text(
                       'Select Ticket:',
                       style: GoogleFonts.libreBaskerville(
-                        fontSize: 14,
-                        color: Colors.black,
+                        fontSize: 13,
+                        color: const Color(0xFF4C4D4E),
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -164,8 +164,8 @@ class _DetailsPageState extends State<DetailsPage> {
                         Text(
                           'Phase I',
                           style: GoogleFonts.libreBaskerville(
-                            fontSize: 14,
-                            color: const Color.fromARGB(255, 36, 36, 36),
+                            fontSize: 13,
+                            color: const Color(0xFF4C4D4E),
                             fontWeight: FontWeight.bold
                           ),
                         ),
@@ -173,8 +173,8 @@ class _DetailsPageState extends State<DetailsPage> {
                         Text(
                           'No.of Tickets',
                           style: GoogleFonts.libreBaskerville(
-                            fontSize: 14,
-                            color: const Color.fromARGB(255, 36, 36, 36),
+                            fontSize: 13,
+                            color: const Color(0xFF4C4D4E),
                             fontWeight: FontWeight.bold
                           ),
                         ),
