@@ -1,3 +1,4 @@
+import 'package:eventify/features/details/checkout.dart';
 import 'package:eventify/features/details/details_screen.dart';
 import 'package:eventify/features/home/home_screen.dart';
 import 'package:eventify/features/login/login.dart';
@@ -15,6 +16,7 @@ class AppRoute {
   static const String signupRoute = '/signup';
   static const String homeRoute = '/home';
   static const String detailsRoute = '/details';
+  static const String checkoutRoute = '/checkout';
 
   static getApplicationRoute() {
     return {
@@ -24,6 +26,7 @@ class AppRoute {
       homeRoute: (context) =>  const HomeScreen(),
       signupRoute: (context) => const SignupPage(),
       detailsRoute: (context) =>  const DetailsPage(),
+      checkoutRoute: (context) =>  const CheckoutPage(),
     };
 
   }
