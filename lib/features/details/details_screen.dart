@@ -1,3 +1,4 @@
+import 'package:eventify/config/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -204,7 +205,9 @@ class _DetailsPageState extends State<DetailsPage> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(context, AppRoute.checkoutRoute);
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFFFC700),
                           shape: RoundedRectangleBorder(
@@ -287,7 +290,7 @@ class _DetailsPageState extends State<DetailsPage> {
             ],
           ),
         ),
-        const SizedBox(width: 70),
+        const SizedBox(width: 60),
         Row(
           children: [
             _buildIconButton(Icons.remove, () {
