@@ -1,7 +1,10 @@
+import 'dart:convert';
+import 'package:eventify/config/constants/api_endpoints.dart';
 import 'package:eventify/config/router/app_router.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Import for TextInputFormatter
+import 'package:flutter/services.dart'; 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -12,9 +15,67 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
   bool _passwordVisible = false;
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
-  // Input formatter to allow only digits
   final _phoneNumberFormatter = FilteringTextInputFormatter.digitsOnly;
+
+  Future<void> _signup() async {
+    final url = Uri.parse('${ApiEndpoints.baseUrl}${ApiEndpoints.register}');
+    final headers = <String, String>{
+      'Content-Type': 'application/json',
+    };
+    final body = jsonEncode({
+      'fullName': _fullNameController.text.trim(),
+      'username': _usernameController.text.trim(),
+      'phoneNumber': _phoneNumberController.text.trim(),
+      'password': _passwordController.text.trim(),
+      'confirmPassword': _confirmPasswordController.text.trim(),
+    });
+
+    try {
+      final response = await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && responseData['success']) {
+        // Successful signup
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Registration successful'),
+            backgroundColor: Colors.green,
+          ),
+        );
+
+        Future.delayed(const Duration(seconds: 2), () {
+          Navigator.pushNamed(context, AppRoute.loginRoute);
+        });
+      } else {
+        // Signup failed
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(responseData['message'] ?? 'Signup failed'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      // Exception during request
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,22 +110,26 @@ class _SignupPageState extends State<SignupPage> {
               _buildTextField(
                 iconPath: 'assets/icons/user.png',
                 hintText: 'Full Name',
+                controller: _fullNameController,
               ),
               const SizedBox(height: 20), 
               _buildTextField(
                 iconPath: 'assets/icons/user.png',
                 hintText: 'Username',
+                controller: _usernameController,
               ),
               const SizedBox(height: 20), 
               _buildTextField(
                 iconPath: 'assets/icons/phone.png',
                 hintText: 'Phone Number',
+                controller: _phoneNumberController,
                 inputFormatters: [_phoneNumberFormatter], 
               ),
               const SizedBox(height: 20),
               _buildTextField(
                 iconPath: 'assets/icons/password.png',
                 hintText: 'Password',
+                controller: _passwordController,
                 obscureText: !_passwordVisible,
                 suffixIcon: IconButton(
                   icon: Icon(
@@ -82,6 +147,7 @@ class _SignupPageState extends State<SignupPage> {
               _buildTextField(
                 iconPath: 'assets/icons/password.png',
                 hintText: 'Confirm Password',
+                controller: _confirmPasswordController,
                 obscureText: !_passwordVisible,
                 suffixIcon: IconButton(
                   icon: Icon(
@@ -100,9 +166,7 @@ class _SignupPageState extends State<SignupPage> {
                 width: 149,
                 height: 37,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, AppRoute.homeRoute);
-                  },
+                  onPressed: _signup,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFFC806),
                     shape: RoundedRectangleBorder(
@@ -135,7 +199,6 @@ class _SignupPageState extends State<SignupPage> {
                       style: GoogleFonts.libreBaskerville(
                         color: const Color(0xFFF56B62),
                         fontSize: 20,
-                        
                       ),
                     ),
                   ),
@@ -151,8 +214,9 @@ class _SignupPageState extends State<SignupPage> {
   Widget _buildTextField({
     required String iconPath,
     required String hintText,
+    required TextEditingController controller, 
     bool obscureText = false,
-    List<TextInputFormatter>? inputFormatters, // Added inputFormatters parameter
+    List<TextInputFormatter>? inputFormatters, 
     Widget? suffixIcon,
   }) {
     return Container(
@@ -174,6 +238,7 @@ class _SignupPageState extends State<SignupPage> {
           const SizedBox(width: 12),
           Expanded(
             child: TextFormField(
+              controller: controller,
               obscureText: obscureText,
               inputFormatters: inputFormatters, 
               decoration: InputDecoration(
