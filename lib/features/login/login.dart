@@ -1,6 +1,9 @@
+import 'dart:convert';
+import 'package:eventify/config/constants/api_endpoints.dart';
 import 'package:eventify/config/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -11,6 +14,51 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   bool _passwordVisible = false;
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future<void> _login() async {
+    final url = Uri.parse(ApiEndpoints.baseUrl + ApiEndpoints.login);
+    final headers = <String, String>{
+      'Content-Type': 'application/json',
+    };
+    final body = jsonEncode({
+      'username': _usernameController.text.trim(),
+      'password': _passwordController.text.trim(),
+    });
+
+    try {
+      final response = await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        // Successful login
+        final token = jsonDecode(response.body)['token'];
+   
+        // ignore: use_build_context_synchronously
+        Navigator.pushNamed(context, AppRoute.homeRoute);
+      } else {
+        // Login failed
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Login failed'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      // Exception during request
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,13 +92,13 @@ class _LoginViewState extends State<LoginView> {
               ),
               const SizedBox(height: 30),
               _buildTextField(
-                iconPath: 'assets/icons/user.png', 
+                iconPath: 'assets/icons/user.png',
                 hintText: 'Username',
-                
+                controller: _usernameController,
               ),
               const SizedBox(height: 40),
               _buildTextField(
-                iconPath: 'assets/icons/password.png', 
+                iconPath: 'assets/icons/password.png',
                 hintText: 'Password',
                 obscureText: !_passwordVisible,
                 suffixIcon: IconButton(
@@ -64,15 +112,14 @@ class _LoginViewState extends State<LoginView> {
                     });
                   },
                 ),
+                controller: _passwordController,
               ),
               const SizedBox(height: 32),
               SizedBox(
                 width: 149,
                 height: 37,
                 child: ElevatedButton(
-                  onPressed: () {
-                     Navigator.pushNamed(context, AppRoute.homeRoute);
-                  },
+                  onPressed: _login,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFFC806),
                     shape: RoundedRectangleBorder(
@@ -98,15 +145,14 @@ class _LoginViewState extends State<LoginView> {
                   ),
                   GestureDetector(
                     onTap: () {
-                       Navigator.pushNamed(context, AppRoute.signupRoute
-                       );
+                      Navigator.pushNamed(context, AppRoute.signupRoute);
                     },
                     child: Text(
                       'Signup',
                       style: GoogleFonts.libreBaskerville(
                         color: const Color(0xFFF56B62),
                         fontSize: 20,
-                       
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -125,7 +171,7 @@ class _LoginViewState extends State<LoginView> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, AppRoute.homeRoute);
+                      // Navigator.pushNamed(context, AppRouter.resetPasswordRoute);
                     },
                     child: Text(
                       'Reset',
@@ -146,41 +192,44 @@ class _LoginViewState extends State<LoginView> {
   }
 
   Widget _buildTextField({
-  required String iconPath,
-  required String hintText,
-  bool obscureText = false,
-  Widget? suffixIcon,
-}) {
-  return Container(
-    width: 319,
-    height: 45,
-    decoration: BoxDecoration(
-      color: const Color(0xFFFFF0BC),
-      borderRadius: BorderRadius.circular(20),
-    ),
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: Row(
-      children: [
-        Image.asset(
-          iconPath,
-          width: 24, // Adjust the width of the image
-          height: 24, // Adjust the height of the image
-          color: const Color.fromARGB(255, 0, 0, 0), // Adjust the color if needed
-        ),
-        SizedBox(width: 12), // Add spacing between icon and text field
-        Expanded(
-          child: TextFormField(
-            obscureText: obscureText,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: hintText,
-              hintStyle: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+    required String iconPath,
+    required String hintText,
+    bool obscureText = false,
+    Widget? suffixIcon,
+    required TextEditingController controller,
+  }) {
+    return Container(
+      width: 319,
+      height: 45,
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFF0BC),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        children: [
+          Image.asset(
+            iconPath,
+            width: 24, 
+            height: 24, 
+            color: const Color.fromARGB(255, 0, 0, 0), 
+          ),
+          const SizedBox(width: 12), 
+          Expanded(
+            child: TextFormField(
+              controller: controller,
+              obscureText: obscureText,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: hintText,
+                hintStyle: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+              ),
             ),
           ),
-        ),
-        if (suffixIcon != null) suffixIcon,
-      ],
-    ),
-  );
+          if (suffixIcon != null) suffixIcon,
+        ],
+      ),
+    );
+  }
 }
-}
+
