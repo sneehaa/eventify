@@ -1,25 +1,31 @@
 import 'dart:convert';
+import 'dart:io';
+
 import 'package:eventify/config/constants/api_endpoints.dart';
 import 'package:eventify/config/router/app_router.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; 
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
 
 class SignupPage extends StatefulWidget {
-  const SignupPage({Key? key}) : super(key: key);
+  const SignupPage({super.key});
 
   @override
   State<SignupPage> createState() => _SignupPageState();
 }
 
 class _SignupPageState extends State<SignupPage> {
+  final Logger _logger = Logger('_SignupPageState');
+
   bool _passwordVisible = false;
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   final _phoneNumberFormatter = FilteringTextInputFormatter.digitsOnly;
 
@@ -37,37 +43,65 @@ class _SignupPageState extends State<SignupPage> {
     });
 
     try {
-      final response = await http.post(
-        url,
-        headers: headers,
-        body: body,
-      );
+      _logger.info(
+          'Sending POST request to $url with body: $body and headers: $headers');
+      final response = await http
+          .post(
+            url,
+            headers: headers,
+            body: body,
+          )
+          .timeout(
+              const Duration(seconds: 30)); // Adjust timeout duration as needed
 
-      final responseData = jsonDecode(response.body);
+      _logger.info('Response status: ${response.statusCode}');
+      _logger.info('Response body: ${response.body}');
 
-      if (response.statusCode == 200 && responseData['success']) {
-        // Successful signup
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Registration successful'),
-            backgroundColor: Colors.green,
-          ),
-        );
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
 
-        Future.delayed(const Duration(seconds: 2), () {
-          Navigator.pushNamed(context, AppRoute.loginRoute);
-        });
+        if (responseData['success']) {
+          // Successful signup
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Registration successful'),
+              backgroundColor: Colors.green,
+            ),
+          );
+
+          Future.delayed(const Duration(seconds: 2), () {
+            Navigator.pushNamed(context, AppRoute.loginRoute);
+          });
+        } else {
+          // Signup failed
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(responseData['message'] ?? 'Signup failed'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       } else {
-        // Signup failed
+        // Server error
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(responseData['message'] ?? 'Signup failed'),
+          const SnackBar(
+            content: Text('Server error'),
             backgroundColor: Colors.red,
           ),
         );
       }
+    } on SocketException catch (e) {
+      // Handle socket timeout or other socket exceptions
+      _logger.severe('SocketException during signup: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Connection timeout. Please try again later.'),
+          backgroundColor: Colors.red,
+        ),
+      );
     } catch (e) {
-      // Exception during request
+      // Other exceptions
+      _logger.severe('Error during signup: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error: $e'),
@@ -112,18 +146,18 @@ class _SignupPageState extends State<SignupPage> {
                 hintText: 'Full Name',
                 controller: _fullNameController,
               ),
-              const SizedBox(height: 20), 
+              const SizedBox(height: 20),
               _buildTextField(
                 iconPath: 'assets/icons/user.png',
                 hintText: 'Username',
                 controller: _usernameController,
               ),
-              const SizedBox(height: 20), 
+              const SizedBox(height: 20),
               _buildTextField(
                 iconPath: 'assets/icons/phone.png',
                 hintText: 'Phone Number',
                 controller: _phoneNumberController,
-                inputFormatters: [_phoneNumberFormatter], 
+                inputFormatters: [_phoneNumberFormatter],
               ),
               const SizedBox(height: 20),
               _buildTextField(
@@ -175,7 +209,8 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                   child: Text(
                     'Signup',
-                    style: GoogleFonts.libreBaskerville(fontSize: 25, color: Colors.black),
+                    style: GoogleFonts.libreBaskerville(
+                        fontSize: 25, color: Colors.black),
                   ),
                 ),
               ),
@@ -214,9 +249,9 @@ class _SignupPageState extends State<SignupPage> {
   Widget _buildTextField({
     required String iconPath,
     required String hintText,
-    required TextEditingController controller, 
+    required TextEditingController controller,
     bool obscureText = false,
-    List<TextInputFormatter>? inputFormatters, 
+    List<TextInputFormatter>? inputFormatters,
     Widget? suffixIcon,
   }) {
     return Container(
@@ -240,7 +275,7 @@ class _SignupPageState extends State<SignupPage> {
             child: TextFormField(
               controller: controller,
               obscureText: obscureText,
-              inputFormatters: inputFormatters, 
+              inputFormatters: inputFormatters,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: hintText,
