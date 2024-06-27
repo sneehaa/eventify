@@ -1,8 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:eventify/config/constants/api_endpoints.dart';
 import 'package:eventify/config/router/app_router.dart';
+import 'package:eventify/core/snackbar/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -29,6 +32,9 @@ class _SignupPageState extends State<SignupPage> {
 
   final _phoneNumberFormatter = FilteringTextInputFormatter.digitsOnly;
 
+  final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
+
   Future<void> _signup() async {
     final url = Uri.parse('${ApiEndpoints.baseUrl}${ApiEndpoints.register}');
     final headers = <String, String>{
@@ -51,8 +57,7 @@ class _SignupPageState extends State<SignupPage> {
             headers: headers,
             body: body,
           )
-          .timeout(
-              const Duration(seconds: 30)); // Adjust timeout duration as needed
+          .timeout(const Duration(seconds: 30));
 
       _logger.info('Response status: ${response.statusCode}');
       _logger.info('Response body: ${response.body}');
@@ -61,52 +66,37 @@ class _SignupPageState extends State<SignupPage> {
         final responseData = jsonDecode(response.body);
 
         if (responseData['success']) {
-          // Successful signup
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Registration successful'),
-              backgroundColor: Colors.green,
-            ),
+          showSnackBar(
+            message: 'Registration successful',
+            context: context,
           );
 
           Future.delayed(const Duration(seconds: 2), () {
             Navigator.pushNamed(context, AppRoute.loginRoute);
           });
         } else {
-          // Signup failed
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(responseData['message'] ?? 'Signup failed'),
-              backgroundColor: Colors.red,
-            ),
+          showSnackBar(
+            message: responseData['message'] ?? 'Signup failed',
+            context: context,
           );
         }
       } else {
-        // Server error
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Server error'),
-            backgroundColor: Colors.red,
-          ),
+        showSnackBar(
+          message: 'Server error',
+          context: context,
         );
       }
     } on SocketException catch (e) {
-      // Handle socket timeout or other socket exceptions
       _logger.severe('SocketException during signup: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Connection timeout. Please try again later.'),
-          backgroundColor: Colors.red,
-        ),
+      showSnackBar(
+        message: 'Connection timeout. Please try again later.',
+        context: context,
       );
     } catch (e) {
-      // Other exceptions
       _logger.severe('Error during signup: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error: $e'),
-          backgroundColor: Colors.red,
-        ),
+      showSnackBar(
+        message: 'Error: $e',
+        context: context,
       );
     }
   }
@@ -114,6 +104,7 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldMessengerKey,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
