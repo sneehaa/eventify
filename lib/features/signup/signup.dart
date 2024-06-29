@@ -106,16 +106,15 @@ class _SignupPageState extends State<SignupPage> {
     return Scaffold(
       key: _scaffoldMessengerKey,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 30),
-              Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: Container(
-                  width: 300,
-                  height: 300,
+        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 20),
+                Container(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height * 0.3,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage('assets/images/splash_screen.png'),
@@ -123,116 +122,122 @@ class _SignupPageState extends State<SignupPage> {
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 200),
-                child: Text(
-                  'Signup',
-                  style: GoogleFonts.libreBaskerville(fontSize: 25),
-                ),
-              ),
-              const SizedBox(height: 30),
-              _buildTextField(
-                iconPath: 'assets/icons/user.png',
-                hintText: 'Full Name',
-                controller: _fullNameController,
-              ),
-              const SizedBox(height: 20),
-              _buildTextField(
-                iconPath: 'assets/icons/user.png',
-                hintText: 'Username',
-                controller: _usernameController,
-              ),
-              const SizedBox(height: 20),
-              _buildTextField(
-                iconPath: 'assets/icons/phone.png',
-                hintText: 'Phone Number',
-                controller: _phoneNumberController,
-                inputFormatters: [_phoneNumberFormatter],
-              ),
-              const SizedBox(height: 20),
-              _buildTextField(
-                iconPath: 'assets/icons/password.png',
-                hintText: 'Password',
-                controller: _passwordController,
-                obscureText: !_passwordVisible,
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _passwordVisible ? Icons.visibility : Icons.visibility_off,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _passwordVisible = !_passwordVisible;
-                    });
-                  },
-                ),
-              ),
-              const SizedBox(height: 20),
-              _buildTextField(
-                iconPath: 'assets/icons/password.png',
-                hintText: 'Confirm Password',
-                controller: _confirmPasswordController,
-                obscureText: !_passwordVisible,
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _passwordVisible ? Icons.visibility : Icons.visibility_off,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _passwordVisible = !_passwordVisible;
-                    });
-                  },
-                ),
-              ),
-              const SizedBox(height: 32),
-              SizedBox(
-                width: 149,
-                height: 37,
-                child: ElevatedButton(
-                  onPressed: _signup,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFFC806),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 250),
                   child: Text(
                     'Signup',
-                    style: GoogleFonts.libreBaskerville(
-                        fontSize: 25, color: Colors.black),
+                    style: GoogleFonts.libreBaskerville(fontSize: 25),
                   ),
                 ),
-              ),
-              const SizedBox(height: 21),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Already have an account? ",
-                    style: GoogleFonts.libreBaskerville(
-                      fontSize: 17,
-                      color: const Color.fromARGB(255, 0, 0, 0),
+                const SizedBox(height: 12),
+                _buildTextField(
+                  iconPath: 'assets/icons/user.png',
+                  hintText: 'Full Name',
+                  controller: _fullNameController,
+                ),
+                const SizedBox(height: 6),
+                _buildTextField(
+                  iconPath: 'assets/icons/user.png',
+                  hintText: 'Username',
+                  controller: _usernameController,
+                ),
+                const SizedBox(height: 6),
+                _buildTextField(
+                  iconPath: 'assets/icons/phone.png',
+                  hintText: 'Phone Number',
+                  controller: _phoneNumberController,
+                  inputFormatters: [_phoneNumberFormatter],
+                ),
+                const SizedBox(height: 6),
+                _buildTextField(
+                  iconPath: 'assets/icons/password.png',
+                  hintText: 'Password',
+                  controller: _passwordController,
+                  obscureText: !_passwordVisible,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _passwordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: Colors.black,
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, AppRoute.loginRoute);
+                    onPressed: () {
+                      setState(() {
+                        _passwordVisible = !_passwordVisible;
+                      });
                     },
+                  ),
+                ),
+                const SizedBox(height: 6),
+                _buildTextField(
+                  iconPath: 'assets/icons/password.png',
+                  hintText: 'Confirm Password',
+                  controller: _confirmPasswordController,
+                  obscureText: !_passwordVisible,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _passwordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _passwordVisible = !_passwordVisible;
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(height: 30),
+                SizedBox(
+                  width: 149,
+                  height: 35,
+                  child: ElevatedButton(
+                    onPressed: _signup,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFFC806),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
                     child: Text(
-                      'Login',
+                      'Signup',
                       style: GoogleFonts.libreBaskerville(
-                        color: const Color(0xFFF56B62),
-                        fontSize: 20,
+                        fontSize: 25,
+                        color: Colors.black,
                       ),
                     ),
                   ),
-                ],
-              ),
-            ],
+                ),
+                const SizedBox(height: 21),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Already have an account? ",
+                      style: GoogleFonts.libreBaskerville(
+                        fontSize: 17,
+                        color: const Color.fromARGB(255, 0, 0, 0),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, AppRoute.loginRoute);
+                      },
+                      child: Text(
+                        'Login',
+                        style: GoogleFonts.libreBaskerville(
+                          color: const Color(0xFFF56B62),
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
+        ]),
       ),
     );
   }
@@ -246,13 +251,14 @@ class _SignupPageState extends State<SignupPage> {
     Widget? suffixIcon,
   }) {
     return Container(
-      width: 319,
-      height: 45,
+      width: 320,
+      height: 37,
       decoration: BoxDecoration(
         color: const Color(0xFFFFF0BC),
         borderRadius: BorderRadius.circular(20),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16),
+      margin: const EdgeInsets.only(bottom: 20),
       child: Row(
         children: [
           Image.asset(
