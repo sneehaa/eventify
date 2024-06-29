@@ -6,27 +6,42 @@ import 'package:eventify/features/home/widgets/popular_events.dart';
 import 'package:eventify/features/home/widgets/topbar.dart';
 import 'package:flutter/material.dart';
 
-
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _selectedIndex = 0;
+
+  void _onItemSelected(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: SingleChildScrollView(
+    return Scaffold(
+      body: const SingleChildScrollView(
         child: Column(
           children: [
             TopBar(),
             EventCategories(),
             NearbyEvents(),
-            SizedBox(height: 15,),
+            SizedBox(height: 15),
             InviteBanner(),
-             SizedBox(height: 15,),
+            SizedBox(height: 15),
             PopularEvents(),
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavBar(), 
+      bottomNavigationBar: BottomNavBar(
+        selectedIndex: _selectedIndex,
+        onItemSelected: _onItemSelected,
+      ),
     );
   }
 }
