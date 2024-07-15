@@ -4,10 +4,12 @@ class ApiEndpoints {
   static const Duration connectionTimeout = Duration(seconds: 1000);
   static const Duration receiveTimeout = Duration(seconds: 1000);
 
-  static const String baseUrl = "http://localhost:5500/api/";
+  static const String baseUrl = "http://192.168.68.109:5500/api/";
 
   // ====================== Auth Routes ======================
   static const String login = "user/login";
   static const String register = "user/register";
   static const String profile = "user/profile";
+
+  static const String create = "events/create";
 }
