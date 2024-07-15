@@ -35,10 +35,10 @@ class _UserProfileState extends State<UserProfile> {
     super.initState();
     final secureStorage = SecureStorage();
     userService = UserService(
-        baseUrl: 'http://localhost:5500/api/user/profile',
+        baseUrl: 'http://192.168.68.109:5500/api/user/profile',
         secureStorage: secureStorage,
-        deleteUrl: 'http://localhost:5500/api/user/delete',
-        editUrl: 'http://localhost:5500/api/user/edit');
+        deleteUrl: 'http://192.168.68.109:5500/api/user/delete',
+        editUrl: 'http://192.168.68.109:5500/api/user/edit');
     fetchUserId();
   }
 
@@ -92,7 +92,7 @@ class _UserProfileState extends State<UserProfile> {
         elevation: 0,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushReplacementNamed(context, AppRoute.homeRoute);
           },
           icon: const Icon(Icons.arrow_back, color: Colors.black),
         ),
@@ -112,132 +112,147 @@ class _UserProfileState extends State<UserProfile> {
           ],
         ),
       ),
-      body: Container(
-        color: const Color(0xFFFFFCF3),
-        child: isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 20),
-                  const CircleAvatar(
-                    radius: 70,
-                    backgroundImage: AssetImage('assets/images/user.jpg'),
-                  ),
-                  const SizedBox(height: 10),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFADDECA),
-                      borderRadius: BorderRadius.circular(20),
+      body: SingleChildScrollView(
+        child: Container(
+          color: const Color(0xFFFFFCF3),
+          child: isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 20),
+                    const CircleAvatar(
+                      radius: 70,
+                      backgroundImage: AssetImage('assets/images/user.jpg'),
                     ),
-                    child: Text(
-                      userData?['fullName'] ?? 'User Name',
-                      style: GoogleFonts.libreBaskerville(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: const Color(0xFF073767),
+                    const SizedBox(height: 10),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFADDECA),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        userData?['fullName'] ?? 'User Name',
+                        style: GoogleFonts.libreBaskerville(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF073767),
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushReplacementNamed(
-                          context, AppRoute.editProfileRoute);
-                    },
-                    child: Text(
-                      'Edit Your Profile',
-                      style: GoogleFonts.libreBaskerville(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: const Color(0x80172B4D),
+                    const SizedBox(height: 10),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushReplacementNamed(
+                            context, AppRoute.editProfileRoute);
+                      },
+                      child: Text(
+                        'Edit Your Profile',
+                        style: GoogleFonts.libreBaskerville(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0x80172B4D),
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 30),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: ListTile(
-                      title: Text('Phone Number',
-                          style: GoogleFonts.libreBaskerville(
-                              fontSize: 15,
-                              color: const Color.fromARGB(128, 19, 36, 66),
-                              fontWeight: FontWeight.bold)),
-                      trailing: Text(userData?['phoneNumber'] ?? 'Phone Number',
-                          style: GoogleFonts.libreBaskerville(
-                            fontSize: 15,
-                            color: const Color(0xE6172B4D),
-                          )),
+                    const SizedBox(height: 30),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: ListTile(
+                        title: Text('Phone Number',
+                            style: GoogleFonts.libreBaskerville(
+                                fontSize: 15,
+                                color: const Color.fromARGB(128, 19, 36, 66),
+                                fontWeight: FontWeight.bold)),
+                        trailing:
+                            Text(userData?['phoneNumber'] ?? 'Phone Number',
+                                style: GoogleFonts.libreBaskerville(
+                                  fontSize: 15,
+                                  color: const Color(0xE6172B4D),
+                                )),
+                      ),
                     ),
-                  ),
-                  const Divider(
-                    color: Color.fromARGB(255, 192, 192, 192),
-                    thickness: 1,
-                    indent: 30,
-                    endIndent: 30,
-                  ),
-                  const SizedBox(height: 20),
-                  ListTile(
-                    leading: const Icon(
-                      Icons.settings,
-                      color: Color(0xFF111111),
-                      size: 35,
+                    const Divider(
+                      color: Color.fromARGB(255, 192, 192, 192),
+                      thickness: 1,
+                      indent: 30,
+                      endIndent: 30,
                     ),
-                    title: Text(
-                      'Change Password',
-                      style: GoogleFonts.libreBaskerville(
-                          color: const Color(0xFF111111), fontSize: 16),
+                    const SizedBox(height: 20),
+                    ListTile(
+                      leading: const Icon(
+                        Icons.settings,
+                        color: Color(0xFF111111),
+                        size: 35,
+                      ),
+                      title: Text(
+                        'Change Password',
+                        style: GoogleFonts.libreBaskerville(
+                            color: const Color(0xFF111111), fontSize: 16),
+                      ),
+                      onTap: () {
+                        Navigator.pushReplacementNamed(
+                            context, AppRoute.createNewPasswordRoute);
+                      },
                     ),
-                    onTap: () {},
-                  ),
-                  const SizedBox(height: 10),
-                  ListTile(
-                    leading: Image.asset(
-                      'assets/icons/delete.png',
-                      width: 35,
-                      height: 35,
+                    const SizedBox(height: 10),
+                    ListTile(
+                      leading: Image.asset(
+                        'assets/icons/delete.png',
+                        width: 35,
+                        height: 35,
+                      ),
+                      title: Text(
+                        'Delete Account',
+                        style: GoogleFonts.libreBaskerville(
+                            color: const Color(0xFF111111), fontSize: 16),
+                      ),
+                      onTap: () {
+                        showCustomModalSheet(
+                            context: context,
+                            message:
+                                'Are you sure you want to delete your account?',
+                            image: Image.asset('assets/images/bye.png',
+                                height: 192, width: 201),
+                            onYesPressed: () async {
+                              await userService.deleteAccount(userId!);
+                              Navigator.pushReplacementNamed(
+                                  context, AppRoute.loginRoute);
+                            });
+                      },
                     ),
-                    title: Text(
-                      'Delete Account',
-                      style: GoogleFonts.libreBaskerville(
-                          color: const Color(0xFF111111), fontSize: 16),
+                    const SizedBox(height: 10),
+                    ListTile(
+                      leading: Image.asset('assets/icons/event.png',
+                          width: 35, height: 35),
+                      title: const Text('My Events'),
+                      onTap: () {
+                        Navigator.pushNamed(context, AppRoute.myeventsRoute);
+                      },
                     ),
-                    onTap: () {
-                      showCustomModalSheet(
+                    const SizedBox(height: 10),
+                    ListTile(
+                      leading: Image.asset('assets/icons/logout.png',
+                          width: 35, height: 35),
+                      title: const Text('Logout'),
+                      onTap: () {
+                        showCustomModalSheet(
                           context: context,
-                          message:
-                              'Are you sure you want to delete your account?',
-                          image: Image.asset('assets/images/bye.png',
-                              height: 192, width: 201),
-                          onYesPressed: () async {
-                            await userService.deleteAccount(userId!);
+                          message: 'Are you sure you want to logout?',
+                          onYesPressed: () {
                             Navigator.pushReplacementNamed(
                                 context, AppRoute.loginRoute);
-                          });
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  ListTile(
-                    leading: Image.asset('assets/icons/logout.png',
-                        width: 35, height: 35),
-                    title: const Text('Logout'),
-                    onTap: () {
-                      showCustomModalSheet(
-                        context: context,
-                        message: 'Are you sure you want to logout?',
-                        onYesPressed: () {
-                          Navigator.pushReplacementNamed(
-                              context, AppRoute.loginRoute);
-                        },
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 30),
-                ],
-              ),
+                          },
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 30),
+                  ],
+                ),
+        ),
       ),
       bottomNavigationBar: BottomNavBar(
         selectedIndex: _selectedIndex,
