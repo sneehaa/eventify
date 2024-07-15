@@ -1,12 +1,11 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:convert';
 
 import 'package:eventify/config/constants/api_endpoints.dart';
 import 'package:eventify/config/router/app_router.dart';
-import 'package:eventify/core/snackbar/snackbar.dart';
+import 'package:eventify/core/snackbar/snackbar.dart'; // Import your custom snackbar utility
 import 'package:eventify/core/storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart'; // Import Geolocator package
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
@@ -30,6 +29,44 @@ class _LoginViewState extends State<LoginView> {
   void initState() {
     super.initState();
     _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+    _requestPermissions(); // Request location permission on init
+  }
+
+  Future<void> _requestPermissions() async {
+    print('Requesting permissions...');
+    await _requestLocationPermission(); // Request location permission
+  }
+
+  Future<void> _requestLocationPermission() async {
+    print('Requesting location permission...');
+    LocationPermission permission = await Geolocator.requestPermission();
+    print('Location permission status: $permission');
+    if (permission == LocationPermission.denied) {
+      showSnackBar(
+        message: 'Location permission denied',
+        context: context,
+      );
+    } else if (permission == LocationPermission.whileInUse ||
+        permission == LocationPermission.always) {
+      _setInitialCameraPosition(); // Proceed to set initial camera position
+    }
+  }
+
+  Future<void> _setInitialCameraPosition() async {
+    try {
+      Position currentPosition = await Geolocator.getCurrentPosition();
+      print('Current position: $currentPosition');
+      // Use the current position to set initial camera position or perform other actions
+      setState(() {
+        // Set your state variables based on the current position if needed
+      });
+    } catch (e) {
+      print('Error getting current location: $e');
+      showSnackBar(
+        message: 'Error getting current location: $e',
+        context: context,
+      );
+    }
   }
 
   Future<void> _login() async {
@@ -50,22 +87,47 @@ class _LoginViewState extends State<LoginView> {
       );
 
       if (response.statusCode == 200) {
-        final token = jsonDecode(response.body)['token'];
-        await secureStorage.writeToken(token);
+        final responseData = jsonDecode(response.body);
+        if (responseData != null && responseData['token'] != null) {
+          final token = responseData['token'] as String;
+          await secureStorage.writeToken(token);
 
-        Navigator.pushNamed(context, AppRoute.homeRoute);
+          // Check location permission
+          LocationPermission permission = await Geolocator.checkPermission();
+          print('Location permission status during login: $permission');
+          if (permission == LocationPermission.denied) {
+            // Request location permission
+            await _requestLocationPermission();
+          } else if (permission == LocationPermission.whileInUse ||
+              permission == LocationPermission.always) {
+            // Navigate to home page
+            Navigator.pushNamed(context, AppRoute.homeRoute);
 
-        showSnackBar(
-          message: 'Login successful',
-          context: context,
-        );
+            // Show snackbar
+            showSnackBar(
+              message: 'Login successful',
+              context: context,
+            );
+          }
+        } else {
+          // Handle unexpected response format
+          print('Invalid response format from server');
+          showSnackBar(
+            message: 'Login failed: Invalid response',
+            context: context,
+          );
+        }
       } else {
+        // Handle non-200 status codes
+        print('Login failed. Status code: ${response.statusCode}');
         showSnackBar(
           message: 'Login failed',
           context: context,
         );
       }
     } catch (e) {
+      // Handle network errors or other exceptions
+      print('Error during login: $e');
       showSnackBar(
         message: 'Error: $e',
         context: context,
@@ -189,7 +251,8 @@ class _LoginViewState extends State<LoginView> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        // Navigate to reset password screen
+                        Navigator.pushReplacementNamed(
+                            context, AppRoute.forgotPasswordRoute);
                       },
                       child: Text(
                         'Reset',
