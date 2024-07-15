@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:convert';
 import 'dart:io';
 
@@ -10,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
-import 'package:logging/logging.dart';
+import 'package:logger/logger.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -20,11 +18,14 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
-  final Logger _logger = Logger('_SignupPageState');
+  final Logger _logger = Logger(
+    printer: PrettyPrinter(),
+  );
 
   bool _passwordVisible = false;
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
@@ -43,13 +44,14 @@ class _SignupPageState extends State<SignupPage> {
     final body = jsonEncode({
       'fullName': _fullNameController.text.trim(),
       'username': _usernameController.text.trim(),
+      'email': _emailController.text.trim(),
       'phoneNumber': _phoneNumberController.text.trim(),
       'password': _passwordController.text.trim(),
       'confirmPassword': _confirmPasswordController.text.trim(),
     });
 
     try {
-      _logger.info(
+      _logger.i(
           'Sending POST request to $url with body: $body and headers: $headers');
       final response = await http
           .post(
@@ -59,8 +61,8 @@ class _SignupPageState extends State<SignupPage> {
           )
           .timeout(const Duration(seconds: 30));
 
-      _logger.info('Response status: ${response.statusCode}');
-      _logger.info('Response body: ${response.body}');
+      _logger.i('Response status: ${response.statusCode}');
+      _logger.i('Response body: ${response.body}');
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
@@ -87,13 +89,13 @@ class _SignupPageState extends State<SignupPage> {
         );
       }
     } on SocketException catch (e) {
-      _logger.severe('SocketException during signup: $e');
+      _logger.w('SocketException during signup: $e');
       showSnackBar(
         message: 'Connection timeout. Please try again later.',
         context: context,
       );
     } catch (e) {
-      _logger.severe('Error during signup: $e');
+      _logger.w('Error during signup: $e');
       showSnackBar(
         message: 'Error: $e',
         context: context,
@@ -106,9 +108,10 @@ class _SignupPageState extends State<SignupPage> {
     return Scaffold(
       key: _scaffoldMessengerKey,
       body: SafeArea(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-          Expanded(
-            child: Column(
+        child: SingleChildScrollView(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+            Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 20),
@@ -140,6 +143,12 @@ class _SignupPageState extends State<SignupPage> {
                   iconPath: 'assets/icons/user.png',
                   hintText: 'Username',
                   controller: _usernameController,
+                ),
+                const SizedBox(height: 6),
+                _buildTextField(
+                  iconPath: 'assets/icons/email.png',
+                  hintText: 'Email',
+                  controller: _emailController,
                 ),
                 const SizedBox(height: 6),
                 _buildTextField(
@@ -236,8 +245,8 @@ class _SignupPageState extends State<SignupPage> {
                 ),
               ],
             ),
-          ),
-        ]),
+          ]),
+        ),
       ),
     );
   }
