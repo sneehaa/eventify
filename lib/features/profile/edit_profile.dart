@@ -33,10 +33,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
     super.initState();
     final secureStorage = SecureStorage();
     userService = UserService(
-        baseUrl: 'http://localhost:5500/api/user/profile',
+        baseUrl: 'http://192.168.68.109:5500/api/user/profile',
         secureStorage: secureStorage,
-        deleteUrl: 'http://localhost:5500/api/user/delete',
-        editUrl: 'http://localhost:5500/api/user/edit');
+        deleteUrl: 'http://192.168.68.109:5500/api/user/delete',
+        editUrl: 'http://192.168.68.109:5500/api/user/edit');
     fetchUserId();
   }
 
@@ -88,6 +88,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         await userService.updateUserData(userId!, {
           'fullName': userData?['fullName'],
           'username': userData?['username'],
+          'email': userData?['email'],
           'phoneNumber': userData?['phoneNumber'],
           'gender': userData?['gender'],
           'location': userData?['location'],
@@ -137,89 +138,101 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    const CircleAvatar(
-                      radius: 70,
-                      backgroundImage: AssetImage('assets/images/user.jpg'),
-                      backgroundColor: Colors.transparent,
-                    ),
-                    const SizedBox(height: 20),
-                    _buildTextFieldWithIcon(
-                      iconPath: 'assets/icons/user.png',
-                      initialValue: userData?['fullName'] ?? '',
-                      onChanged: (value) {
-                        setState(() {
-                          userData?['fullName'] = value;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 25),
-                    _buildTextFieldWithIcon(
-                      iconPath: 'assets/icons/user.png',
-                      initialValue: userData?['username'] ?? '',
-                      onChanged: (value) {
-                        setState(() {
-                          userData?['username'] = value;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 25),
-                    _buildTextFieldWithIcon(
-                      iconPath: 'assets/icons/phone.png',
-                      initialValue: userData?['phoneNumber'] ?? '',
-                      onChanged: (value) {
-                        setState(() {
-                          userData?['phoneNumber'] = value;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 25),
-                    _buildTextFieldWithIcon(
-                      iconPath: 'assets/icons/gender.png',
-                      hintText: 'Gender',
-                      initialValue: userData?['gender'] ?? '',
-                      onChanged: (value) {
-                        setState(() {
-                          userData?['gender'] = value;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 25),
-                    _buildTextFieldWithIcon(
-                      iconPath: 'assets/icons/direction.png',
-                      hintText: 'Location',
-                      initialValue: userData?['location'] ?? '',
-                      onChanged: (value) {
-                        setState(() {
-                          userData?['location'] = value;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 25),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFFFC700),
-                        minimumSize: const Size(140, 50),
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+          : SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      const CircleAvatar(
+                        radius: 70,
+                        backgroundImage: AssetImage('assets/images/user.jpg'),
+                        backgroundColor: Colors.transparent,
+                      ),
+                      const SizedBox(height: 20),
+                      _buildTextFieldWithIcon(
+                        iconPath: 'assets/icons/user.png',
+                        initialValue: userData?['fullName'] ?? '',
+                        onChanged: (value) {
+                          setState(() {
+                            userData?['fullName'] = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 25),
+                      _buildTextFieldWithIcon(
+                        iconPath: 'assets/icons/user.png',
+                        initialValue: userData?['username'] ?? '',
+                        onChanged: (value) {
+                          setState(() {
+                            userData?['username'] = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 25),
+                      _buildTextFieldWithIcon(
+                        iconPath: 'assets/icons/email.png',
+                        initialValue: userData?['email'] ?? '',
+                        onChanged: (value) {
+                          setState(() {
+                            userData?['email'] = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 25),
+                      _buildTextFieldWithIcon(
+                        iconPath: 'assets/icons/phone.png',
+                        initialValue: userData?['phoneNumber'] ?? '',
+                        onChanged: (value) {
+                          setState(() {
+                            userData?['phoneNumber'] = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 25),
+                      _buildTextFieldWithIcon(
+                        iconPath: 'assets/icons/gender.png',
+                        hintText: 'Gender',
+                        initialValue: userData?['gender'] ?? '',
+                        onChanged: (value) {
+                          setState(() {
+                            userData?['gender'] = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 25),
+                      _buildTextFieldWithIcon(
+                        iconPath: 'assets/icons/direction.png',
+                        hintText: 'Location',
+                        initialValue: userData?['location'] ?? '',
+                        onChanged: (value) {
+                          setState(() {
+                            userData?['location'] = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 25),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFFFC700),
+                          minimumSize: const Size(140, 50),
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        onPressed: saveProfileChanges,
+                        child: Text(
+                          'Save',
+                          style: GoogleFonts.libreBaskerville(
+                            color: Colors.black,
+                            fontSize: 20,
+                          ),
                         ),
                       ),
-                      onPressed: saveProfileChanges,
-                      child: Text(
-                        'Save',
-                        style: GoogleFonts.libreBaskerville(
-                          color: Colors.black,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
