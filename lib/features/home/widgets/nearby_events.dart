@@ -1,8 +1,53 @@
-import 'package:flutter/material.dart';
-import 'package:eventify/features/home/widgets/event_card.dart';
+import 'dart:convert';
 
-class NearbyEvents extends StatelessWidget {
-  const NearbyEvents({super.key});
+import 'package:eventify/features/home/widgets/event_card.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+class NearbyEvents extends StatefulWidget {
+  const NearbyEvents({Key? key}) : super(key: key);
+
+  @override
+  _NearbyEventsState createState() => _NearbyEventsState();
+}
+
+class _NearbyEventsState extends State<NearbyEvents> {
+  List<dynamic> events = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchEvents();
+  }
+
+  Future<void> fetchEvents() async {
+    try {
+      final response = await http
+          .get(Uri.parse('http://192.168.68.109:5500/api/admin/events/getAll'));
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        if (responseData['success'] == true && responseData['events'] is List) {
+          setState(() {
+            events = responseData['events'];
+            isLoading = false;
+          });
+        } else {
+          setState(() {
+            isLoading = false;
+          });
+        }
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,23 +67,26 @@ class NearbyEvents extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () {},
-                child: const Text('See all', style: TextStyle(
-                  fontSize: 14,
-                ),)
-                ,
+                child: const Text(
+                  'See all',
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
               ),
             ],
           ),
           const SizedBox(height: 10),
-          const SingleChildScrollView(
+          SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                EventCard(),
-                EventCard(),
-                EventCard(),
-              ],
-            ),
+            child: isLoading
+                ? Center(child: CircularProgressIndicator())
+                : events.isEmpty
+                    ? Center(child: Text('No events available'))
+                    : Row(
+                        children:
+                            events.map<Widget>((event) => EventCard()).toList(),
+                      ),
           ),
         ],
       ),
