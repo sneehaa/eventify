@@ -12,6 +12,7 @@ import 'package:eventify/features/home/home_screen.dart';
 import 'package:eventify/features/login/login.dart';
 import 'package:eventify/features/notifications/notifications.dart';
 import 'package:eventify/features/onBoarding/onboarding_screen.dart';
+import 'package:eventify/features/profile/change_password.dart';
 import 'package:eventify/features/profile/edit_profile.dart';
 import 'package:eventify/features/profile/user_profile.dart';
 import 'package:eventify/features/signup/signup.dart';
@@ -36,6 +37,7 @@ class AppRoute {
   static const String forgotPasswordRoute = '/forgotPassword';
   static const String verifyOtpRoute = '/verifyOtp';
   static const String createNewPasswordRoute = '/createNewPassword';
+  static const String changePasswordRoute = '/changePassword';
   static const String myeventsRoute = '/myevents';
   static const String notificationRoute = '/notification';
 
@@ -63,6 +65,7 @@ class AppRoute {
       createNewPasswordRoute: (context) => const NewPasswordPage(),
       myeventsRoute: (context) => const MyEventsPage(),
       notificationRoute: (context) => const NotificationsPage(),
+      changePasswordRoute: (context) => const ChangePasswordPage()
     };
   }
 }
