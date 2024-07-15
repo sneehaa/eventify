@@ -236,10 +236,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
               ),
             ),
-      bottomNavigationBar: BottomNavBar(
-        selectedIndex: _selectedIndex,
-        onItemSelected: _onItemSelected,
-      ),
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 

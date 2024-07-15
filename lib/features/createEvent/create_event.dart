@@ -693,10 +693,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavBar(
-        selectedIndex: _selectedIndex,
-        onItemSelected: _onItemSelected,
-      ),
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 }

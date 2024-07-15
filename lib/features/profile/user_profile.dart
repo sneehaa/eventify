@@ -254,10 +254,7 @@ class _UserProfileState extends State<UserProfile> {
                 ),
         ),
       ),
-      bottomNavigationBar: BottomNavBar(
-        selectedIndex: _selectedIndex,
-        onItemSelected: _onItemSelected,
-      ),
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 }

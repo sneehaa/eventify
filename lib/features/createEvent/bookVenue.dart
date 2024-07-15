@@ -827,10 +827,7 @@ class _VenueBookingPageState extends State<VenueBookingPage> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavBar(
-        selectedIndex: _selectedIndex,
-        onItemSelected: _onItemSelected,
-      ),
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 }

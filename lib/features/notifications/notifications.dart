@@ -140,10 +140,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                 },
               ),
             ),
-      bottomNavigationBar: BottomNavBar(
-        selectedIndex: _selectedIndex,
-        onItemSelected: _onItemSelected,
-      ),
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 }

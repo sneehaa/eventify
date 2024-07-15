@@ -182,10 +182,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                     ],
                   ),
                 ),
-      bottomNavigationBar: BottomNavBar(
-        selectedIndex: 0,
-        onItemSelected: _onItemSelected,
-      ),
+      bottomNavigationBar: const BottomNavBar(),
     );
   }
 
@@ -245,10 +242,10 @@ class _FavoritesPageState extends State<FavoritesPage> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Text(
+                    const Text(
                       'Tickets:',
-                      style: const TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                     const Spacer(),
                     Container(
@@ -276,9 +273,9 @@ class _FavoritesPageState extends State<FavoritesPage> {
                 children: [
                   _buildIconButton(Icons.remove, () {}),
                   const SizedBox(width: 8),
-                  Text(
+                  const Text(
                     '1',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                     ),
                   ),

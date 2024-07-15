@@ -117,6 +117,20 @@ class _LoginViewState extends State<LoginView> {
             context: context,
           );
         }
+      } else if (response.statusCode == 401) {
+        // Handle unauthorized access (e.g., incorrect password)
+        print('Login failed: Unauthorized access');
+        showSnackBar(
+          message: 'Login failed: Incorrect password or username',
+          context: context,
+        );
+      } else if (response.statusCode == 404) {
+        // Handle user not found
+        print('Login failed: User not found');
+        showSnackBar(
+          message: 'Login failed: User does not exist',
+          context: context,
+        );
       } else {
         // Handle non-200 status codes
         print('Login failed. Status code: ${response.statusCode}');
