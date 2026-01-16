@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer' as developer;
 
 import 'package:eventify/config/service/user_service.dart';
+import 'package:eventify/core/snackbar/snackbar.dart';
 import 'package:eventify/core/storage/flutter_secure_storage.dart';
 import 'package:eventify/features/details/ticket_count.dart';
 import 'package:eventify/features/models/promo_modal.dart';
@@ -28,6 +29,8 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
+  final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
   late UserService userService;
   Map<String, dynamic>? userData;
   String? userId;
@@ -43,10 +46,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
     super.initState();
     final secureStorage = SecureStorage();
     userService = UserService(
-        baseUrl: 'http://192.168.68.109:5500/api/user/profile',
+        baseUrl: 'http://172.20.10.9:5500/api/user/profile',
         secureStorage: secureStorage,
-        deleteUrl: 'http://192.168.68.109:5500/api/user/delete',
-        editUrl: 'http://192.168.68.109:5500/api/user/edit');
+        deleteUrl: 'http://172.20.10.9:5500/api/user/delete',
+        editUrl: 'http://172.20.10.9:5500/api/user/edit');
     fetchUserId();
     if (widget.event['adminImages'] != null &&
         widget.event['adminImages'].isNotEmpty) {
@@ -99,7 +102,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Future<List<PromoCode>> fetchPromoCodesFromBackend() async {
     try {
       String? token = await SecureStorage().readToken();
-      final url = Uri.parse('http://192.168.68.109:5500/api/promo-codes');
+      final url = Uri.parse('http://172.20.10.9:5500/api/promo-codes');
       final headers = {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json; charset=UTF-8',
@@ -142,8 +145,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
           promoDiscountPercentage =
               selectedPromoCode.discount / 100; // Ensure this is a double
         });
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Promo code applied successfully')),
+        showSnackBar(
+          message: 'Promo Code Applied Successfully',
+          context: context,
+          isSuccess: true,
         );
       } else {
         // Invalid promo code
@@ -151,14 +156,18 @@ class _CheckoutPageState extends State<CheckoutPage> {
           appliedPromoCode = '';
           promoDiscountPercentage = 0.0;
         });
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Invalid promo code')),
+        showSnackBar(
+          message: 'Invalid Promo code',
+          context: context,
+          isSuccess: false,
         );
       }
     } catch (e) {
       developer.log('Error applying promo code: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to apply promo code')),
+      showSnackBar(
+        message: 'Error applying promo code',
+        context: context,
+        isSuccess: false,
       );
     }
   }
@@ -201,6 +210,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         : totalAmount;
 
     return Scaffold(
+      key: _scaffoldMessengerKey,
       body: Stack(
         children: [
           Positioned(

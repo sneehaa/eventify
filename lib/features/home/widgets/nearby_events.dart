@@ -24,7 +24,7 @@ class _NearbyEventsState extends State<NearbyEvents> {
   Future<void> fetchEvents() async {
     try {
       final response = await http
-          .get(Uri.parse('http://192.168.68.109:5500/api/admin/events/getAll'));
+          .get(Uri.parse('http://172.20.10.9:5500/api/admin/events/getAll'));
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
         if (responseData['success'] == true && responseData['events'] is List) {

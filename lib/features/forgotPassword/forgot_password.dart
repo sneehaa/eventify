@@ -18,7 +18,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   Future<void> _sendOTP() async {
     String email = _emailController.text.trim();
-    final url = Uri.parse('http://192.168.68.109:5500/api/send-otp');
+    final url = Uri.parse('http://172.20.10.9:5500/api/send-otp');
     try {
       final response = await http.post(
         url,

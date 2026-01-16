@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:eventify/config/constants/api_endpoints.dart';
 import 'package:eventify/config/router/app_router.dart';
-import 'package:eventify/core/snackbar/snackbar.dart'; // Import your custom snackbar utility
+import 'package:eventify/core/snackbar/snackbar.dart';
 import 'package:eventify/core/storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart'; // Import Geolocator package
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
@@ -21,7 +21,8 @@ class _LoginViewState extends State<LoginView> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  late final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey;
+  GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
 
   final SecureStorage secureStorage = SecureStorage();
 
@@ -29,12 +30,12 @@ class _LoginViewState extends State<LoginView> {
   void initState() {
     super.initState();
     _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
-    _requestPermissions(); // Request location permission on init
+    _requestPermissions();
   }
 
   Future<void> _requestPermissions() async {
     print('Requesting permissions...');
-    await _requestLocationPermission(); // Request location permission
+    await _requestLocationPermission();
   }
 
   Future<void> _requestLocationPermission() async {
@@ -45,10 +46,11 @@ class _LoginViewState extends State<LoginView> {
       showSnackBar(
         message: 'Location permission denied',
         context: context,
+        isSuccess: false,
       );
     } else if (permission == LocationPermission.whileInUse ||
         permission == LocationPermission.always) {
-      _setInitialCameraPosition(); // Proceed to set initial camera position
+      _setInitialCameraPosition();
     }
   }
 
@@ -56,20 +58,27 @@ class _LoginViewState extends State<LoginView> {
     try {
       Position currentPosition = await Geolocator.getCurrentPosition();
       print('Current position: $currentPosition');
-      // Use the current position to set initial camera position or perform other actions
-      setState(() {
-        // Set your state variables based on the current position if needed
-      });
+      setState(() {});
     } catch (e) {
       print('Error getting current location: $e');
       showSnackBar(
         message: 'Error getting current location: $e',
         context: context,
+        isSuccess: false,
       );
     }
   }
 
   Future<void> _login() async {
+    if (_usernameController.text.trim().isEmpty ||
+        _passwordController.text.trim().isEmpty) {
+      showSnackBar(
+        message: 'Please enter all fields',
+        context: context,
+        isSuccess: false,
+      );
+      return;
+    }
     final url = Uri.parse(ApiEndpoints.baseUrl + ApiEndpoints.login);
     final headers = <String, String>{
       'Content-Type': 'application/json',
@@ -107,6 +116,7 @@ class _LoginViewState extends State<LoginView> {
             showSnackBar(
               message: 'Login successful',
               context: context,
+              isSuccess: true,
             );
           }
         } else {
@@ -115,28 +125,39 @@ class _LoginViewState extends State<LoginView> {
           showSnackBar(
             message: 'Login failed: Invalid response',
             context: context,
+            isSuccess: false,
           );
         }
       } else if (response.statusCode == 401) {
         // Handle unauthorized access (e.g., incorrect password)
         print('Login failed: Unauthorized access');
-        showSnackBar(
-          message: 'Login failed: Incorrect password or username',
-          context: context,
-        );
-      } else if (response.statusCode == 404) {
-        // Handle user not found
-        print('Login failed: User not found');
-        showSnackBar(
-          message: 'Login failed: User does not exist',
-          context: context,
-        );
+        final responseData = jsonDecode(response.body);
+        if (responseData['error'] == 'username') {
+          showSnackBar(
+            message: 'User does not exist',
+            context: context,
+            isSuccess: false,
+          );
+        } else if (responseData['error'] == 'password') {
+          showSnackBar(
+            message: 'Incorrect password',
+            context: context,
+            isSuccess: false,
+          );
+        } else {
+          showSnackBar(
+            message: 'Login failed: Unauthorized access',
+            context: context,
+            isSuccess: false,
+          );
+        }
       } else {
         // Handle non-200 status codes
         print('Login failed. Status code: ${response.statusCode}');
         showSnackBar(
           message: 'Login failed',
           context: context,
+          isSuccess: false,
         );
       }
     } catch (e) {
@@ -145,142 +166,139 @@ class _LoginViewState extends State<LoginView> {
       showSnackBar(
         message: 'Error: $e',
         context: context,
+        isSuccess: false,
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldMessenger(
+    return Scaffold(
       key: _scaffoldMessengerKey,
-      child: Scaffold(
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 30),
-                Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: Container(
-                    width: 370,
-                    height: 370,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/splash_screen.png'),
-                        fit: BoxFit.contain,
-                      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 30),
+              Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: Container(
+                  width: 370,
+                  height: 370,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/splash_screen.png'),
+                      fit: BoxFit.contain,
                     ),
                   ),
                 ),
-                const SizedBox(height: 5),
-                Padding(
-                  padding: const EdgeInsets.only(right: 200),
+              ),
+              const SizedBox(height: 5),
+              Padding(
+                padding: const EdgeInsets.only(right: 200),
+                child: Text(
+                  'Login',
+                  style: GoogleFonts.libreBaskerville(fontSize: 25),
+                ),
+              ),
+              const SizedBox(height: 30),
+              _buildTextField(
+                iconPath: 'assets/icons/user.png',
+                hintText: 'Username',
+                controller: _usernameController,
+              ),
+              const SizedBox(height: 40),
+              _buildTextField(
+                iconPath: 'assets/icons/password.png',
+                hintText: 'Password',
+                obscureText: !_passwordVisible,
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _passwordVisible = !_passwordVisible;
+                    });
+                  },
+                ),
+                controller: _passwordController,
+              ),
+              const SizedBox(height: 32),
+              SizedBox(
+                width: 149,
+                height: 37,
+                child: ElevatedButton(
+                  onPressed: _login,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFFFC806),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
                   child: Text(
                     'Login',
-                    style: GoogleFonts.libreBaskerville(fontSize: 25),
+                    style: GoogleFonts.libreBaskerville(
+                        fontSize: 25, color: Colors.black),
                   ),
                 ),
-                const SizedBox(height: 30),
-                _buildTextField(
-                  iconPath: 'assets/icons/user.png',
-                  hintText: 'Username',
-                  controller: _usernameController,
-                ),
-                const SizedBox(height: 40),
-                _buildTextField(
-                  iconPath: 'assets/icons/password.png',
-                  hintText: 'Password',
-                  obscureText: !_passwordVisible,
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _passwordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      color: Colors.black,
+              ),
+              const SizedBox(height: 21),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Don't Have an Account? ",
+                    style: GoogleFonts.libreBaskerville(
+                      fontSize: 17,
+                      color: const Color.fromARGB(255, 0, 0, 0),
                     ),
-                    onPressed: () {
-                      setState(() {
-                        _passwordVisible = !_passwordVisible;
-                      });
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, AppRoute.signupRoute);
                     },
-                  ),
-                  controller: _passwordController,
-                ),
-                const SizedBox(height: 32),
-                SizedBox(
-                  width: 149,
-                  height: 37,
-                  child: ElevatedButton(
-                    onPressed: _login,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFFC806),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
                     child: Text(
-                      'Login',
+                      'Signup',
                       style: GoogleFonts.libreBaskerville(
-                          fontSize: 25, color: Colors.black),
+                        color: const Color(0xFFF56B62),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 21),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Don't Have an Account? ",
-                      style: GoogleFonts.libreBaskerville(
-                        fontSize: 17,
-                        color: const Color.fromARGB(255, 0, 0, 0),
-                      ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Forgot your password? ",
+                    style: GoogleFonts.libreBaskerville(
+                      fontSize: 15,
+                      color: const Color.fromARGB(255, 0, 0, 0),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, AppRoute.signupRoute);
-                      },
-                      child: Text(
-                        'Signup',
-                        style: GoogleFonts.libreBaskerville(
-                          color: const Color(0xFFF56B62),
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Forgot your password? ",
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushReplacementNamed(
+                          context, AppRoute.forgotPasswordRoute);
+                    },
+                    child: Text(
+                      'Reset',
                       style: GoogleFonts.libreBaskerville(
                         fontSize: 15,
-                        color: const Color.fromARGB(255, 0, 0, 0),
+                        color: const Color(0xFFF56B62),
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacementNamed(
-                            context, AppRoute.forgotPasswordRoute);
-                      },
-                      child: Text(
-                        'Reset',
-                        style: GoogleFonts.libreBaskerville(
-                          fontSize: 15,
-                          color: const Color(0xFFF56B62),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

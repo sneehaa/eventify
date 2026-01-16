@@ -38,8 +38,7 @@ class _DetailsPageState extends State<DetailsPage> {
   Future<Map<String, dynamic>?> fetchEventDetails(String eventId) async {
     try {
       final response = await http.get(
-        Uri.parse(
-            'http://192.168.68.109:5500/api/admin/events/${widget.eventId}'),
+        Uri.parse('http://172.20.10.9:5500/api/admin/events/${widget.eventId}'),
       );
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -72,7 +71,7 @@ class _DetailsPageState extends State<DetailsPage> {
   }
 
   Future<void> toggleFavorite() async {
-    const url = 'http://192.168.68.109:5500/api/favorites/toggleFavorite';
+    const url = 'http://172.20.10.9:5500/api/favorites/toggleFavorite';
     final token = await SecureStorage().readToken();
 
     if (token == null) {

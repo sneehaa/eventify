@@ -17,7 +17,7 @@ class _EventCardState extends State<EventCard> {
   Future<List<Map<String, dynamic>>> fetchEvents() async {
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.68.109:5500/api/admin/events/getAll'),
+        Uri.parse('http://172.20.10.9:5500/api/admin/events/getAll'),
       );
 
       if (response.statusCode == 200) {

@@ -115,7 +115,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
     }
 
     try {
-      final url = Uri.parse('http://192.168.68.109:5500/api/events/create');
+      final url = Uri.parse('http://172.20.10.9:5500/api/events/create');
       final token = await SecureStorage().readToken();
       if (token == null) {
         throw Exception('Token not found');

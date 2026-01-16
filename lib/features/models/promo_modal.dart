@@ -117,7 +117,7 @@ Future<List<PromoCode>> fetchPromoCodesFromBackend() async {
   try {
     String? token = await secureStorage.readToken();
 
-    final url = Uri.parse('http://192.168.68.109:5500/api/promo-codes');
+    final url = Uri.parse('http://172.20.10.9:5500/api/promo-codes');
     final headers = {
       'Authorization': 'Bearer $token',
       'Content-Type': 'application/json; charset=UTF-8',

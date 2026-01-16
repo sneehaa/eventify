@@ -38,8 +38,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
     _logger.d('Token retrieved: $token'); // Logging token retrieval
 
     final response = await http.get(
-      Uri.parse(
-          'http://192.168.68.109:5500/api/notifications/get-notifications'),
+      Uri.parse('http://172.20.10.9:5500/api/notifications/get-notifications'),
       headers: {
         'Authorization': 'Bearer $token',
       },

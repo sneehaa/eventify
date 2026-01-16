@@ -40,7 +40,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
       logger.d('Updating password...');
 
       final response = await http.post(
-        Uri.parse('http://192.168.68.109:5500/api/update-password'),
+        Uri.parse('http://172.20.10.9:5500/api/update-password'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

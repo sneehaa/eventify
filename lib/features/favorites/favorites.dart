@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:eventify/config/router/app_router.dart';
+import 'package:eventify/core/snackbar/snackbar.dart';
 import 'package:eventify/core/storage/flutter_secure_storage.dart';
 import 'package:eventify/features/home/widgets/bottom_navbar.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,9 @@ class FavoritesPage extends StatefulWidget {
 }
 
 class _FavoritesPageState extends State<FavoritesPage> {
+  final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
+
   List<Map<String, dynamic>> favorites = [];
   bool isLoading = true;
   int _selectedIndex = 0;
@@ -28,7 +32,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
     try {
       final token = await SecureStorage().readToken();
       final response = await http.get(
-        Uri.parse('http://192.168.68.109:5500/api/favorites/getFavorites'),
+        Uri.parse('http://172.20.10.9:5500/api/favorites/getFavorites'),
         headers: {'Authorization': 'Bearer $token'},
       );
 
@@ -77,7 +81,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
     try {
       final token = await SecureStorage().readToken();
       final url = Uri.parse(
-          'http://192.168.68.109:5500/api/favorites/removeFavorite/$eventId');
+          'http://172.20.10.9:5500/api/favorites/removeFavorite/$eventId');
 
       final response = await http.delete(
         url,
@@ -88,14 +92,21 @@ class _FavoritesPageState extends State<FavoritesPage> {
         setState(() {
           favorites.removeAt(index); // Remove item from local list
         });
-        print('Favorite successfully removed');
+        showSnackBar(
+            message: "Favorite removed successfully",
+            context: context,
+            isSuccess: true);
       } else {
-        print('Failed to remove favorite: ${response.statusCode}');
-        // Handle error if needed
+        showSnackBar(
+            message: "Failed to remove favorites",
+            context: context,
+            isSuccess: true);
       }
     } catch (e) {
-      print('Error removing favorite: $e');
-      // Handle error
+      showSnackBar(
+          message: "Error removing Favorites",
+          context: context,
+          isSuccess: true);
     }
   }
 
@@ -108,6 +119,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldMessengerKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -193,7 +205,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
 
     if (event['adminImages'] != null && event['adminImages'].isNotEmpty) {
       // Assuming you need to prepend the base URL to the image path
-      imageUrl = 'http://192.168.68.109:5500/${event['adminImages'][0]}';
+      imageUrl = 'http://10.12.13.78:5500/${event['adminImages'][0]}';
     }
 
     return Card(

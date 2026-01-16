@@ -55,7 +55,7 @@ class _VenueBookingPageState extends State<VenueBookingPage> {
       final token = await SecureStorage().readToken();
       if (token != null) {
         final response = await http.get(
-          Uri.parse('http://192.168.68.109:5500/api/venues/locations'),
+          Uri.parse('http://172.20.10.9:5500/api/venues/locations'),
           headers: {
             'Authorization': 'Bearer $token',
           },
@@ -108,7 +108,7 @@ class _VenueBookingPageState extends State<VenueBookingPage> {
       final token = await SecureStorage().readToken();
       if (token != null) {
         final response = await http.get(
-          Uri.parse('http://192.168.68.109:5500/api/venues/getVenues'),
+          Uri.parse('http://172.20.10.9:5500/api/venues/getVenues'),
           headers: {
             'Authorization': 'Bearer $token',
           },
@@ -140,7 +140,7 @@ class _VenueBookingPageState extends State<VenueBookingPage> {
                       final venueData = {
                         'venueName': venue['name'],
                         'image':
-                            'http://192.168.68.109:5500/' + venue['images'][0],
+                            'http://10.12.13.78:5500/' + venue['images'][0],
                         'price': venue['price'].toString(),
                         'location': locationName,
                       };
@@ -232,7 +232,7 @@ class _VenueBookingPageState extends State<VenueBookingPage> {
 
           final response = await http.post(
             Uri.parse(
-                'http://192.168.68.109:5500/api/user/venuebookings/createBooking'),
+                'http://172.20.10.9:5500/api/user/venuebookings/createBooking'),
             headers: {
               'Authorization': 'Bearer $token',
               'Content-Type': 'application/json',

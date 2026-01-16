@@ -29,7 +29,7 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
         otp3Controller.text +
         otp4Controller.text;
     try {
-      const String apiUrl = 'http://192.168.68.109:5500/api/verify-otp';
+      const String apiUrl = 'http://172.20.10.9:5500/api/verify-otp';
 
       final response = await http.post(
         Uri.parse(apiUrl),
@@ -68,7 +68,7 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
 
   Future<void> resendCode() async {
     try {
-      const String apiUrl = 'http://192.168.68.109:5500/api/resend-otp';
+      const String apiUrl = 'http://172.20.10.9:5500/api/resend-otp';
 
       final response = await http.post(
         Uri.parse(apiUrl),

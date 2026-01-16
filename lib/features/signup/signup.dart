@@ -71,6 +71,7 @@ class _SignupPageState extends State<SignupPage> {
           showSnackBar(
             message: 'Registration successful',
             context: context,
+            isSuccess: true,
           );
 
           Future.delayed(const Duration(seconds: 2), () {
@@ -80,12 +81,14 @@ class _SignupPageState extends State<SignupPage> {
           showSnackBar(
             message: responseData['message'] ?? 'Signup failed',
             context: context,
+            isSuccess: false,
           );
         }
       } else {
         showSnackBar(
           message: 'Server error',
           context: context,
+          isSuccess: false,
         );
       }
     } on SocketException catch (e) {
@@ -93,12 +96,14 @@ class _SignupPageState extends State<SignupPage> {
       showSnackBar(
         message: 'Connection timeout. Please try again later.',
         context: context,
+        isSuccess: false,
       );
     } catch (e) {
       _logger.w('Error during signup: $e');
       showSnackBar(
         message: 'Error: $e',
         context: context,
+        isSuccess: false,
       );
     }
   }

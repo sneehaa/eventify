@@ -22,9 +22,9 @@ class _MyEventsPageState extends State<MyEventsPage> {
   void initState() {
     super.initState();
     userService = UserService(
-      baseUrl: 'http://192.168.68.109:5500/api',
-      deleteUrl: 'http://192.168.68.109:5500/api/user/delete',
-      editUrl: 'http://192.168.68.109:5500/api/user/edit',
+      baseUrl: 'http://10.12.13.78:5500/api',
+      deleteUrl: 'http://172.20.10.9:5500/api/user/delete',
+      editUrl: 'http://172.20.10.9:5500/api/user/edit',
       secureStorage: SecureStorage(),
     );
     fetchUserEvents();
@@ -145,7 +145,7 @@ class _MyEventsPageState extends State<MyEventsPage> {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(15),
                             child: Image.network(
-                              'http://192.168.68.109:5500/${event.images.first}',
+                              'http://10.12.13.78:5500/${event.images.first}',
                               height: 200,
                               width: double.infinity,
                               fit: BoxFit.cover,

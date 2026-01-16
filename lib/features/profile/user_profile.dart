@@ -35,10 +35,10 @@ class _UserProfileState extends State<UserProfile> {
     super.initState();
     final secureStorage = SecureStorage();
     userService = UserService(
-        baseUrl: 'http://192.168.68.109:5500/api/user/profile',
+        baseUrl: 'http://172.20.10.9:5500/api/user/profile',
         secureStorage: secureStorage,
-        deleteUrl: 'http://192.168.68.109:5500/api/user/delete',
-        editUrl: 'http://192.168.68.109:5500/api/user/edit');
+        deleteUrl: 'http://172.20.10.9:5500/api/user/delete',
+        editUrl: 'http://172.20.10.9:5500/api/user/edit');
     fetchUserId();
   }
 
